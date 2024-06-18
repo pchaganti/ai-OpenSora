@@ -7,7 +7,7 @@
 - [Evaluation](#evaluation)
 - [Sequence parallelism](#sequence-parallelism)
 
-In Open-Sora 1.2 release, we train a 1.1B models on >20M data, with training cost 35k H100 GPU hours, supporting 0s~16s, 144p to 720p, various aspect ratios video generation. Our configurations is listed below. Following our 1.1 version, Open-Sora 1.2 can also do image-to-video generation and video extension.
+In Open-Sora 1.2 release, we train a 1.1B models on >30M data (~80k hours), with training cost 35k H100 GPU hours, supporting 0s~16s, 144p to 720p, various aspect ratios video generation. Our configurations is listed below. Following our 1.1 version, Open-Sora 1.2 can also do image-to-video generation and video extension.
 
 |      | image | 2s  | 4s  | 8s  | 16s |
 | ---- | ----- | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ We initialize the 2D VAE with [SDXL's VAE](https://huggingface.co/stabilityai/sd
 
 Our training involves three stages:
 
-1. For the first 380k steps, we train on 8 GPUs and freese the 2D VAE. The training objective includes the reconstruction of the compressed features from 2D VAE (pink one in the figure) and also add a loss to make features from the 3D VAE similar to the features from the 2D VAE (pink one and green one, called identity loss). We find the latter loss can quickly make the whole VAE achieve a good performance for image and much faster to converge in the next stage.
+1. For the first 380k steps, we train on 8 GPUs and freeze the 2D VAE. The training objective includes the reconstruction of the compressed features from 2D VAE (pink one in the figure) and also add a loss to make features from the 3D VAE similar to the features from the 2D VAE (pink one and green one, called identity loss). We find the latter loss can quickly make the whole VAE achieve a good performance for image and much faster to converge in the next stage.
 2. For the next 260k steps, We remove the identity loss and just learn the 3D VAE.
 3. For the last 540k steps , since we find only reconstruction 2D VAE's feature cannot lead to further improvement, we remove the loss and train the whole VAE to reconstruct the original videos. This stage is trained on on 24 GPUs.
 
