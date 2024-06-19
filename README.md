@@ -41,8 +41,8 @@ With Open-Sora, our goal is to foster innovation, creativity, and inclusivity wi
 🔥 You can experience Open-Sora on our [🤗 Gradio application on Hugging Face](https://huggingface.co/spaces/hpcai-tech/open-sora). More samples are available in our [Gallery](https://hpcaitech.github.io/Open-Sora/).
 
 
-| **4s 720×1280**                                                                                                                                              | **4s 720×1280**                                                                                                                                             | **4s 720×1280**                                                                                                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **4s 720×1280**                                                                                                                                      | **4s 720×1280**                                                                                                                                      | **4s 720×1280**                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [<img src="assets/demo/v1.2/sample_0013.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/7895aab6-ed23-488c-8486-091480c26327) | [<img src="assets/demo/v1.2/sample_1718.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/20f07c7b-182b-4562-bbee-f1df74c86c9a) | [<img src="assets/demo/v1.2/sample_0087.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/3d897e0d-dc21-453a-b911-b3bda838acc2) |
 | [<img src="assets/demo/v1.2/sample_0052.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/644bf938-96ce-44aa-b797-b3c0b513d64c) | [<img src="assets/demo/v1.2/sample_1719.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/272d88ac-4b4a-484d-a665-8d07431671d0) | [<img src="assets/demo/v1.2/sample_0002.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/ebbac621-c34e-4bb4-9543-1c34f8989764) |
 | [<img src="assets/demo/v1.2/sample_0011.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/a1e3a1a3-4abd-45f5-8df2-6cced69da4ca) | [<img src="assets/demo/v1.2/sample_0004.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/d6ce9c13-28e1-4dff-9644-cc01f5f11926) | [<img src="assets/demo/v1.2/sample_0061.gif" width="">](https://github.com/hpcaitech/Open-Sora/assets/99191637/561978f8-f1b0-4f4d-ae7b-45bec9001b4a) |
@@ -89,6 +89,10 @@ see [here](/assets/texts/t2v_samples.txt) for full prompts.
 - ✅ Trained our 3D-VAE for temporal dimension compression.
 - 📍 **Open-Sora 1.1** released. Model weights are available [here](#model-weights). It is trained on **0s~15s, 144p to 720p, various aspect ratios** videos. See our **[report 1.1](/docs/report_02.md)** for more discussions.
 - 🔧 **Data processing pipeline v1.1** is released. An automatic [processing pipeline](#data-processing) from raw videos to (text, video clip) pairs is provided, including scene cutting $\rightarrow$ filtering(aesthetic, optical flow, OCR, etc.) $\rightarrow$ captioning $\rightarrow$ managing. With this tool, you can easily build your video dataset.
+
+<details>
+<summary>View more</summary>
+
 - ✅ Improved ST-DiT architecture includes rope positional encoding, qk norm, longer text length, etc.
 - ✅ Support training with any resolution, aspect ratio, and duration (including images).
 - ✅ Support image and video conditioning and video editing, and thus support animating images, connecting videos, etc.
@@ -103,10 +107,6 @@ see [here](/assets/texts/t2v_samples.txt) for full prompts.
   including [downloading](tools/datasets/README.md), [video cutting](tools/scene_cut/README.md),
   and [captioning](tools/caption/README.md) tools. Our data collection plan can be found
   at [datasets.md](docs/datasets.md).
-
-<details>
-<summary>View more</summary>
-
 - ✅ We find VQ-VAE from [VideoGPT](https://wilson1yan.github.io/videogpt/index.html) has a low quality and thus adopt a
   better VAE from [Stability-AI](https://huggingface.co/stabilityai/sd-vae-ft-mse-original). We also find patching in
   the time dimension deteriorates the quality. See our **[report](docs/report_01.md)** for more discussions.
@@ -154,7 +154,11 @@ see [here](/assets/texts/t2v_samples.txt) for full prompts.
 
 Other useful documents and links are listed below.
 
-- Report: [report 1.2](docs/report_03.md), [report 1.1](docs/report_02.md), [report 1.0](docs/report_01.md), [acceleration.md](docs/acceleration.md)
+- Report: each version is trained from a image base seperately (not continuously trained), while a newer version will incorporate the techniques from the previous version.
+  - [report 1.2](docs/report_03.md): rectified flow, 3d-VAE, score condition, evaluation, etc.
+  - [report 1.1](docs/report_02.md): multi-resolution/length/aspect-ratio, image/video conditioning/editing, data preprocessing, etc.
+  - [report 1.0](docs/report_01.md): architecture, captioning, etc.
+  - [acceleration.md](docs/acceleration.md)
 - Repo structure: [structure.md](docs/structure.md)
 - Config file explanation: [config.md](docs/config.md)
 - Useful commands: [commands.md](docs/commands.md)
@@ -174,12 +178,12 @@ For CUDA 12.1, you can install the dependencies with the following commands. Oth
 conda create -n opensora python=3.9
 conda activate opensora
 
-# install torch, torchvision and xformers
-pip install -r requirements/requirements-cu121.txt
-
 # download the repo
 git clone https://github.com/hpcaitech/Open-Sora
 cd Open-Sora
+
+# install torch, torchvision and xformers
+pip install -r requirements/requirements-cu121.txt
 
 # the default installation is for inference only
 pip install -v . # for development mode, `pip install -v -e .`
@@ -203,13 +207,13 @@ pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation -
 Run the following command to build a docker image from Dockerfile provided.
 
 ```bash
-docker build -t opensora ./docker
+docker build -t opensora .
 ```
 
 Run the following command to start the docker container in interactive mode.
 
 ```bash
-docker run -ti --gpus all -v {MOUNT_DIR}:/data opensora
+docker run -ti --gpus all -v .:/workspace/Open-Sora opensora
 ```
 
 ## Model Weights
@@ -299,7 +303,7 @@ Then, you can choose the **resolution**, **duration**, and **aspect ratio** of t
 | 480p | 2s, 24G | 29s, 31G | 55s, 30G  | 108s, 32G | 219s, 36G |
 | 720p | 6s, 27G | 68s, 41G | 130s, 39G | 260s, 45G | 547s, 67G |
 
-Note that besides text to video, you can also use image to video generation. You can upload an image and then click the "**Generate video**" button to generate a video with the image as the first frame. Or you can fill in the text prompt and click the "**Generate image**" button to generate an image with the text prompt, and then click the "**Generate video**" button to generate a video with the image generated with the same model.
+Note that besides text to video, you can also use **image to video generation**. You can upload an image and then click the "**Generate video**" button to generate a video with the image as the first frame. Or you can fill in the text prompt and click the "**Generate image**" button to generate an image with the text prompt, and then click the "**Generate video**" button to generate a video with the image generated with the same model.
 
 ![Gradio Demo](assets/readme/gradio_option.png)
 
@@ -343,6 +347,19 @@ python scripts/inference.py configs/opensora-v1-2/inference/sample.py \
   --layernorm-kernel False --flash-attn False \
   --prompt "a beautiful waterfall"
 ```
+
+### Sequence Parallelism Inference
+
+To enable sequence parallelism, you need to use `torchrun` to run the inference script. The following command will run the inference with 2 GPUs.
+
+```bash
+# text to video
+CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node 2 scripts/inference.py configs/opensora-v1-2/inference/sample.py \
+  --num-frames 4s --resolution 720p --aspect-ratio 9:16 \
+  --prompt "a beautiful waterfall"
+```
+
+:warning: **LIMITATION**: The sequence parallelism is not supported for gradio deployment. For now, the sequence parallelism is only supported when the dimension can be divided by the number of GPUs. Thus, it may fail for some cases. We tested 4 GPUs for 720p and 2 GPUs for 480p.
 
 ### GPT-4o Prompt Refinement
 
@@ -481,7 +498,7 @@ For training other models and advanced usage, see [here](docs/commands.md) for m
 We support evaluation based on:
 
 - Validation loss
-- VBench score
+- [VBench](https://github.com/Vchitect/VBench/tree/master) score
 - VBench-i2v score
 - Batch generation for human evaluation
 
